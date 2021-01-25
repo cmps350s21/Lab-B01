@@ -1,0 +1,28 @@
+body {
+    background-color: linen;
+}
+.red{
+    background-color: red;
+}.blue{
+    background-color: blue;
+}.green{
+    background-color: green;
+}
+p{
+    border-style: solid;
+}
+.container{
+    display: flex;
+    flex-wrap: wrap-reverse;
+}
+.blue{
+    flex: 1 200px;
+}
+.red{
+    flex: 3 400px;
+    order : 2
+}
+.green{
+    flex: 1 200px;
+    order: 2;
+}
