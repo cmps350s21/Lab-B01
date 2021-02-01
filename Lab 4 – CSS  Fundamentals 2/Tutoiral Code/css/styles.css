@@ -1,0 +1,27 @@
+.box{
+    border-style: solid;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+}
+.innerBox{
+    margin: auto;
+    border-style: solid;
+    width: 150px;
+    height: 150px;
+    background-color: darkblue;
+}
+.nav_link{
+    list-style: none;
+    display: inline;
+    margin: 10px;
+}
+
+a{
+    text-decoration: none;
+    color: white;
+}
+
