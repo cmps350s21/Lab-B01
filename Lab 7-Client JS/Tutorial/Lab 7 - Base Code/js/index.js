@@ -8,6 +8,7 @@ async function getUniversities() {
     let data = await fetch(url)  //server might take 30 second
     let universities = await data.json()  // long
     loadUniversities(universities)
+    localStorage.setItem('universities' , JSON.stringify(universities))
 }
 
 function loadUniversities(universities) {
@@ -17,7 +18,14 @@ function loadUniversities(universities) {
     universitiesDD.innerHTML = uniOptions
     loadWebsite(universities[0].web_pages[0])
 
+
 }
+
+function showNumber(){
+    let number = localStorage.getItem('universities')
+    console.log(JSON.parse(number))
+}
+
 
 function loadWebsite(websiteUrl){website.src = websiteUrl}
 
