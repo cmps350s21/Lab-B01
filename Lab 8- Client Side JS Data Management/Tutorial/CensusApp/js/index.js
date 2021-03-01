@@ -15,11 +15,15 @@ formElement.addEventListener('submit', addCensus)
 // Step 0 : create/open our database
 const db = new Localbase('census.db')
 
+//
+let isEdit = false;
+let censusTobeEdited;
 //Step 0.1 :
 showCensusData() //open the database and load the collection documents
 
 async function showCensusData() {
     const census = await db.collection('census').get()
+
     const rows = census.map(c => censusToHTMLRaw(c))
     countriesTable.innerHTML = `
                <thead>
@@ -29,21 +33,8 @@ async function showCensusData() {
                         <th>Action</th>
                     </tr>
                </thead>
-               ${ rows.join('')}
+               ${rows.join('')}
         `
-}
-
-function censusToHTMLRaw(c) {
-    return `
-        <tr>
-            <td>${c.country}</td>
-            <td>${c.population}</td>
-            <td>
-                <i class="fa fa-pencil">Edit</i>
-                <i class="fa fa-trash">Delete</i>
-            </td>
-        </tr>
-    `
 }
 
 async function addCensus(event) {
@@ -52,15 +43,48 @@ async function addCensus(event) {
     //convert this form into a census object
     event.preventDefault();
     const newCensus = form2Object(formElement)
-    newCensus.id = Date.now()
 
     //to add this census to the indexDB database in a collection
     //called census //long running operation
-    let successMessage = await db.collection('census').add(newCensus)
+    if (isEdit) {
+        let successMessage = await db.collection('census').doc({id: censusTobeEdited.id}).update(newCensus)
+        // let successMessage = await db.collection('census').doc({id: censusTobeEdited.id}).set(newCensus)
+        await showCensusData()
 
-    //we call again the show
-    const newCensusRow = censusToHTMLRaw(newCensus)
-    countriesTable.innerHTML += newCensusRow
+    } else {
+        newCensus.id = Date.now()
+        let successMessage = await db.collection('census').add(newCensus)
+        const newCensusRow = censusToHTMLRaw(newCensus)
+        countriesTable.innerHTML += newCensusRow
+    }
+
+    formElement.reset()
+    isEdit = false
+}
+
+async function deleteCensus(cid, ele) {
+    await db.collection('census').doc({id: parseInt(cid)}).delete()
+    await showCensusData()
+}
+
+async function editCensus(cid) {
+    censusTobeEdited = await db.collection('census').doc({id: parseInt(cid)}).get()
+    countryInputBox.value = censusTobeEdited.country
+    populationInputBox.value = censusTobeEdited.population
+    isEdit = true
+}
+
+function censusToHTMLRaw(c) {
+    return `
+        <tr>
+            <td>${c.country}</td>
+            <td>${c.population}</td>
+            <td>
+                <i class="fa fa-pencil" onclick="editCensus('${c.id}')">Edit</i>
+                <i class="fa fa-trash" onclick="deleteCensus('${c.id}')">Delete</i>
+            </td>
+        </tr>
+    `
 }
 
 function form2Object(formElement) {
