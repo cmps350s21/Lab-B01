@@ -19,10 +19,14 @@ const db = new Localbase('census.db')
 let isEdit = false;
 let censusTobeEdited;
 //Step 0.1 :
-showCensusData() //open the database and load the collection documents
+showCensusData('1000') //open the database and load the collection documents
 
-async function showCensusData() {
-    const census = await db.collection('census').get()
+async function showCensusData(noOfRecords) {
+    const census = await db
+        .collection('census')
+        .orderBy('country', 'asc')
+        .limit(parseInt(noOfRecords))
+        .get()
 
     const rows = census.map(c => censusToHTMLRaw(c))
     countriesTable.innerHTML = `
@@ -43,21 +47,22 @@ async function addCensus(event) {
     //convert this form into a census object
     event.preventDefault();
     const newCensus = form2Object(formElement)
+    newCensus.population = parseInt(newCensus.population.toString())
 
     //to add this census to the indexDB database in a collection
     //called census //long running operation
     if (isEdit) {
         let successMessage = await db.collection('census').doc({id: censusTobeEdited.id}).update(newCensus)
         // let successMessage = await db.collection('census').doc({id: censusTobeEdited.id}).set(newCensus)
-        await showCensusData()
+
 
     } else {
         newCensus.id = Date.now()
         let successMessage = await db.collection('census').add(newCensus)
-        const newCensusRow = censusToHTMLRaw(newCensus)
-        countriesTable.innerHTML += newCensusRow
+        // const newCensusRow = censusToHTMLRaw(newCensus)
+        // countriesTable.innerHTML += newCensusRow
     }
-
+    await showCensusData()
     formElement.reset()
     isEdit = false
 }
