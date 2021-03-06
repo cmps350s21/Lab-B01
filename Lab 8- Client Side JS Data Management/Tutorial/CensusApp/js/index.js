@@ -8,14 +8,12 @@ const populationInputBox = document.querySelector('#population')
 const formElement = document.querySelector('#form')
 const countriesTable = document.querySelector('#countries')
 
-
 //Step 2 : when the button is clicked I want a function called addCensus
 formElement.addEventListener('submit', addCensus)
 
 // Step 0 : create/open our database
 const db = new Localbase('census.db')
 
-//
 let isEdit = false;
 let censusTobeEdited;
 //Step 0.1 :
@@ -91,7 +89,6 @@ function censusToHTMLRaw(c) {
         </tr>
     `
 }
-
 function form2Object(formElement) {
     const formData = new FormData(formElement);
     const data = {}
