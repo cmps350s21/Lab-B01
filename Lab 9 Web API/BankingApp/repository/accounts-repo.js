@@ -1,8 +1,9 @@
 import fs from 'fs-extra'
-const filePath = '../data/accounts.json'
+import { fileURLToPath } from 'url';
+const url = new URL('../data/accounts.json', import.meta.url);
+const filePath = fileURLToPath(url);
 
 class AccountsRepo{
-
     async getAccounts({type}) {
         const accounts = await fs.readJson(filePath)
         if(type=='All')
@@ -15,7 +16,6 @@ class AccountsRepo{
         const accounts = await fs.readJson(filePath)
         accounts.push(account)
         return await fs.writeJson(filePath , accounts)
-
     }
 
     async updateAccount(account) {
@@ -34,7 +34,6 @@ class AccountsRepo{
     }
 
     async deleteAccount(accNo) {
-
         const accounts = await fs.readJson(filePath)
         const filteredAccounts = accounts.filter(acc => acc.accountNo != accNo)
         console.log(filteredAccounts)

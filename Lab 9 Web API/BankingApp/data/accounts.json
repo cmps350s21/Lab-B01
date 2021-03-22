@@ -1,10 +1,5 @@
 [
   {
-    "accountNo": 1101,
-    "acctType": "Current",
-    "balance": 500
-  },
-  {
     "accountNo": 2002,
     "acctType": "Saving",
     "balance": 8000,
