@@ -37,7 +37,6 @@ router.route('/accounts')
             res.send(`unable to update the account you are looking for`)
         }
     })
-
 router.route('/accounts/:acctNo')
     .get((req, res) => {
         const accNo = req.params.acctNo
