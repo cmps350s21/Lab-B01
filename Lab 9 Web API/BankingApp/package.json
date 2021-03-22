@@ -12,6 +12,7 @@
   "dependencies": {
     "chai": "latest",
     "express": "latest",
+    "fs-extra": "^9.1.0",
     "mocha": "latest",
     "morgan": "latest"
   }
