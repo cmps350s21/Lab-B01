@@ -1,7 +1,3 @@
-// document.addEventListener('DOMContentLoaded', ()=>{
-//     //Step 1
-// })
-
 //Step 1 : to get the reference for our views
 const countryInputBox = document.querySelector('#country')
 const populationInputBox = document.querySelector('#population')
