@@ -15,8 +15,9 @@ class AccountsServices {
     async addAccount(req, res) {
         try{
             const account = req.body
-            await accountRepo.addAccount(account)
-            res.status(201).send('successfully added your account')
+            console.log(account)
+            const newAccount = await accountRepo.addAccount(account)
+            res.status(201).json(newAccount)
         }catch (error) {
             res.status(500).send(error)
         }

@@ -1,44 +1,52 @@
-import fs from 'fs-extra'
-import {fileURLToPath} from 'url';
-
-const url = new URL('../data/accounts.json', import.meta.url);
-const filePath = fileURLToPath(url);
+import Account from '../models/account.js'
+import Transaction from '../models/account-trans.js'
 
 class AccountsRepo {
     async getAccounts({type}) {
-        const accounts = await fs.readJson(filePath)
         if (type == 'All')
-            return accounts
+            return Account.find()
         else if (type == 'Current' || type == 'Saving')
-            return accounts.filter(acc => acc.acctType == type)
+            return Account.find({accType: type})
     }
 
     async addAccount(account) {
-        const accounts = await fs.readJson(filePath)
-        accounts.push(account)
-        return await fs.writeJson(filePath, accounts)
+        return Account.create(account)
     }
 
-    async updateAccount(account) {
-        const accounts = await fs.readJson(filePath)
-        const index = accounts.findIndex(acc => acc.accountNo == account.accountNo)
-        if (index > 0) {
-            accounts[index] = account
-            return await fs.writeJson(filePath, accounts)
-        }
-        return null
+    async updateAccount(updatedAccount) {
+        return Account.findByIdAndUpdate(updatedAccount._id, updatedAccount)
     }
 
     async getAccount(accNo) {
-        const accounts = await fs.readJson(filePath)
-        const account = accounts.find(acc => acc.accountNo == accNo)
-        return account
+        return Account.findOne({_id: accNo})
     }
 
     async deleteAccount(accNo) {
-        const accounts = await fs.readJson(filePath)
-        const filteredAccounts = accounts.filter(acc => acc.accountNo != accNo)
-        return await fs.writeJson(filePath, filteredAccounts)
+        return Account.deleteOne({_id: accNo})
+    }
+
+    async deleteAllAccounts() {
+        return Account.delete()
+    }
+    async getTransaction(accountNo){
+        return Transaction.find({accountNo})
+    }
+    async addTransaction(trans){
+        trans.amount = parseInt(trans.amount.toString())
+        //the account this transaction belongs too
+        const account = await this.getAccount(trans.accountNo)
+
+        if(trans.transType == 'Deposit')
+            account.balance += trans.amount
+        else
+            account.balance -= trans.amount
+
+
+        //we need to save this values back to the database
+        const newTransaction = await Transaction.create(trans)
+        await account.save()
+
+        return newTransaction;
     }
 }
 
