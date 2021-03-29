@@ -34,3 +34,5 @@ accountSchema.virtual('accountNo').get(function () {
 accountSchema.virtual('interestRate').get(function () {
     return this.balance * 0.5
 })
+
+export default mongoose.model('Account', accountSchema)
