@@ -12,6 +12,3 @@ app.use(express.json())
 app.listen(port, () => {
     console.log(`Server started @http://localhost:${port}`)
 })
-
-[model]
-[repository]--read/write to db
