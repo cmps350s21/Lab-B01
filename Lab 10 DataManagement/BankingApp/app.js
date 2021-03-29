@@ -6,7 +6,7 @@ const port = 3000
 
 const app = express()
 // mongod
-const uri = "mongodb+srv://dbUser:dbUserPassWord@cluster0.tptzm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const uri = `mongodb+srv://dbUser:dbUserPassword@cluster0.tptzm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 const options = {useNewUrlParser: true, useUnifiedTopology: true}
 
 mongoose.connect(uri , options , (err)=>{

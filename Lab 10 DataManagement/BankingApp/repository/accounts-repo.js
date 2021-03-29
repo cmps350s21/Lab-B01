@@ -3,10 +3,10 @@ import Transaction from '../models/account-trans.js'
 
 class AccountsRepo {
     async getAccounts({type}) {
-        if (type == 'All')
-            return Account.find()
-        else if (type == 'Current' || type == 'Saving')
+        if (type == 'Current' || type == 'Saving')
             return Account.find({accType: type})
+        else
+            return Account.find()
     }
 
     async addAccount(account) {
